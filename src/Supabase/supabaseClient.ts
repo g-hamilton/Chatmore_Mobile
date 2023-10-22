@@ -1,11 +1,10 @@
 // @ts-ignore
-import { SUPABASE_URL, SUPABASE_PUBLIC_KEY } from '@env';
 import { createClient } from '@supabase/supabase-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Database } from "../../DatabaseDefinitions";
+import { Database } from '../../DatabaseDefinitions';
 
-const supabaseUrl = SUPABASE_URL
-const supabaseAnonKey = SUPABASE_PUBLIC_KEY
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLIC_KEY || '';
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
@@ -19,4 +18,4 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
       eventsPerSecond: 10,
     },
   },
-})
+});
