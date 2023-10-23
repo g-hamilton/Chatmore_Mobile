@@ -87,7 +87,8 @@ const ChatConversationScreen = () => {
     actualRoom.messages
       .map((dateMessage) =>
         dateMessage.messages.filter((message) => {
-          if (message.user !== session?.user.id) return message.view === false;
+          if (message.user_id !== session?.user.id)
+            return message.view === false;
         })
       )
       .filter((mess) => mess.length && mess.length > 0)
@@ -175,7 +176,7 @@ const ChatConversationScreen = () => {
           )}
           data={actualRoom?.messages}
         />
-        {isUserBlocked.hasConnectedUserBlockedRoom && (
+        {isUserBlocked.hasConnectedUserBlockedRoom ? (
           <Center>
             <Pressable
               _pressed={{
@@ -195,7 +196,7 @@ const ChatConversationScreen = () => {
               </Text>
             </Pressable>
           </Center>
-        )}
+        ) : null}
         <ChatConversationBottom />
       </Flex>
     </Box>

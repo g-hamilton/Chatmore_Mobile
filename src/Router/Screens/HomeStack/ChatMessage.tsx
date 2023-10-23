@@ -49,7 +49,7 @@ const ChatMessage = ({ item }: Props) => {
   const channels = supabase.getChannels();
   const getChannelRoom = useMemo(() => {
     const channelRoom = channels.find(
-      (chan) => chan.topic.split(':')[1] === 'room' + item.room.toString()
+      (chan) => chan.topic.split(':')[1] === 'room' + item.room_id.toString()
     );
     if (channelRoom) return channelRoom;
     return null;
@@ -63,7 +63,7 @@ const ChatMessage = ({ item }: Props) => {
   }, [item.images]);
 
   const isFromConnectedUser = useMemo(() => {
-    return item.user === session?.user.id;
+    return item.user_id === session?.user.id;
   }, []);
 
   const getImageSource = async (source: string | null) => {
@@ -149,7 +149,7 @@ const ChatMessage = ({ item }: Props) => {
           flexDir='row'
           flexWrap='wrap'
         >
-          {imageSrc !== '' && imageSrc !== null && (
+          {imageSrc !== '' && imageSrc !== null ? (
             <ImageComponent
               // @ts-ignore
               source={{
@@ -164,9 +164,9 @@ const ChatMessage = ({ item }: Props) => {
               left='0'
               right='0'
             />
-          )}
+          ) : null}
           <Text color='white'>{item.content}</Text>
-          {item.created_at && (
+          {item.created_at ? (
             <Text
               color={'white'}
               fontSize='2xs'
@@ -176,7 +176,7 @@ const ChatMessage = ({ item }: Props) => {
             >
               {dateFormatted(item.created_at)}
             </Text>
-          )}
+          ) : null}
         </HStack>
       );
     }

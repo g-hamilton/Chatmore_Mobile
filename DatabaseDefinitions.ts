@@ -39,8 +39,8 @@ export interface Database {
         Row: {
           id: number;
           created_at: string;
-          room: number;
-          user: string;
+          room_id: number;
+          user_id: string;
           view: boolean;
           content: string;
           is_blocked: boolean;
@@ -48,8 +48,8 @@ export interface Database {
         Insert: {
           id?: number;
           created_at?: string;
-          room?: number;
-          user?: string;
+          room_id?: number;
+          user_id?: string;
           view?: boolean;
           content: string;
           is_blocked?: boolean;
@@ -57,8 +57,8 @@ export interface Database {
         Update: {
           id?: number;
           created_at?: string;
-          room?: number;
-          user?: string;
+          room_id?: number;
+          user_id?: string;
           view?: boolean;
           content?: string;
           is_blocked?: boolean;

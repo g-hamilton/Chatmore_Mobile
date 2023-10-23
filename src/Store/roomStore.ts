@@ -11,7 +11,7 @@ import {
 } from '../Interface/Types';
 import {
   getUserRooms,
-  getRoom,
+  getRoomWithUserProfile,
   getRoomMessages,
   getRoomBlockUsers,
 } from '../Api/API';
@@ -34,8 +34,10 @@ interface RoomsState {
 }
 
 interface RoomInnerJoinData {
-  room: number;
-  user: Profile;
+  id: number;
+  room_id: number;
+  user_id: string;
+  profiles: Profile;
 }
 
 export interface DateMessages {
@@ -89,17 +91,20 @@ const formatMessagesByDates = (messages: Message[]) => {
 };
 
 const getUserChatRooms = async (user: User) => {
-  const data = await getUserRooms(user?.id!);
+  const userRooms = await getUserRooms(user?.id!);
+  console.log('userRooms', userRooms);
 
   let newRooms: RoomsState = {
     rooms: [],
   };
 
-  for (let i = 0; i < data?.length || 0; i++) {
-    const roomData: any = await getRoom(data[i].room);
-    const roomMessages: any = await getRoomMessages(data[i].room);
-    const roomBlockUsers: any = await getRoomBlockUsers(data[i].room);
-    const roomNew: RoomState = {
+  for (let i = 0; i < userRooms?.length || 0; i++) {
+    const roomData: any = await getRoomWithUserProfile(userRooms[i].room_id);
+    console.log('roomData', roomData);
+    const roomMessages: any = await getRoomMessages(userRooms[i].room_id);
+    console.log('roomMessages', roomMessages);
+    const roomBlockUsers: any = await getRoomBlockUsers(userRooms[i].room_id);
+    const newRoom: RoomState = {
       room: 0,
       users: [],
       messages: [],
@@ -108,13 +113,14 @@ const getUserChatRooms = async (user: User) => {
     };
     if (!roomData || !roomMessages) return newRooms;
     roomData.forEach((room: RoomInnerJoinData) => {
-      roomNew.room = room.room;
-      if (room.user.id !== user.id) roomNew.users.push(room.user);
+      newRoom.room = room.room_id;
+      if (room.user_id !== user.id) newRoom.users.push(room.profiles);
     });
 
-    roomNew.messages = formatMessagesByDates(roomMessages.reverse());
-    roomNew.blockedUsers = roomBlockUsers;
-    newRooms.rooms.push(roomNew);
+    newRoom.messages = formatMessagesByDates(roomMessages.reverse());
+    newRoom.blockedUsers = roomBlockUsers;
+    console.log('newRoom', newRoom);
+    newRooms.rooms.push(newRoom);
   }
 
   return newRooms;
@@ -138,7 +144,7 @@ const useRoomStore = create(
       set((state) => {
         if (message !== undefined) {
           const roomIndex = state.rooms.findIndex(
-            (room) => room.room === message.room
+            (room) => room.room === message.room_id
           );
           if (roomIndex !== -1) {
             const dateIndex = state.rooms[roomIndex].messages.findIndex(
@@ -169,7 +175,7 @@ const useRoomStore = create(
       set((state) => {
         if (message !== undefined) {
           const roomIndex = state.rooms.findIndex(
-            (room) => room.room === message.room
+            (room) => room.room === message.room_id
           );
           if (roomIndex !== -1) {
             const dateIndex = state.rooms[roomIndex].messages.findIndex(
@@ -187,7 +193,7 @@ const useRoomStore = create(
     updateViewRoomMessages: (messages) => {
       set((state) => {
         const roomIndex = state.rooms.findIndex(
-          (room) => room.room === messages[0].room
+          (room) => room.room === messages[0].room_id
         );
         if (roomIndex !== -1) {
           const room = { ...state.rooms[roomIndex] };

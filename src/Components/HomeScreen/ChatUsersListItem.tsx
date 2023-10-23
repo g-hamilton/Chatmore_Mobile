@@ -42,13 +42,13 @@ const ChatUsersListItem = ({ item }: Props) => {
   };
   const isUserTypying = useUserIsTypying(item.room);
 
-  const isFromConnectedUser = actualMessage.user === session?.user.id;
+  const isFromConnectedUser = actualMessage.user_id === session?.user.id;
 
   const getNotViewedMessages = (user_id: string | undefined) => {
     const count = item.messages
       .map((dateMessage) =>
         dateMessage.messages.filter((message) => {
-          if (message.user !== user_id) return message.view === false;
+          if (message.user_id !== user_id) return message.view === false;
         })
       )
       .filter((mess) => mess.length && mess.length > 0);
@@ -77,7 +77,7 @@ const ChatUsersListItem = ({ item }: Props) => {
               borderRadius={'full'}
               bg='yellow.500'
             >
-              {user.username &&
+              {user?.username &&
                 user?.username[0].toUpperCase() +
                   user?.username[1].toUpperCase()}
             </Avatar>
@@ -140,7 +140,7 @@ const ChatUsersListItem = ({ item }: Props) => {
             borderRadius={'full'}
             bg='yellow.500'
           >
-            {user.username &&
+            {user?.username &&
               user?.username[0].toUpperCase() + user?.username[1].toUpperCase()}
           </Avatar>
 
@@ -159,15 +159,15 @@ const ChatUsersListItem = ({ item }: Props) => {
                 {user.username}
               </Text>
 
-              {actualMessage.created_at && (
+              {actualMessage.created_at ? (
                 <Text color='white' fontSize={'xs'}>
                   {dateFormatted(actualMessage.created_at)}
                 </Text>
-              )}
+              ) : null}
             </Flex>
             <Flex justifyContent={'space-between'} flexDir='row'>
               <HStack alignItems='center' space='1'>
-                {isFromConnectedUser && (
+                {isFromConnectedUser ? (
                   <Icon
                     as={Ionicons}
                     name='checkmark-done-sharp'
@@ -175,7 +175,7 @@ const ChatUsersListItem = ({ item }: Props) => {
                       actualMessage.view ? darktheme.accentColor : 'gray.500'
                     }
                   />
-                )}
+                ) : null}
                 <Text
                   color={isUserTypying ? darktheme.accentColor : 'gray.400'}
                   ellipsizeMode='tail'
@@ -188,26 +188,24 @@ const ChatUsersListItem = ({ item }: Props) => {
                   {isUserTypying ? 'Is writing...' : actualMessage.content}
                 </Text>
                 {actualMessage.images !== undefined &&
-                  actualMessage.images.length &&
-                  actualMessage.images.length > 0 && (
-                    <HStack alignItems='center' space='1'>
-                      <Icon
-                        as={MaterialCommunityIcons}
-                        name='image'
-                        color='gray.500'
-                        size={4}
-                      />
-                      <Text
-                        color={
-                          isUserTypying ? darktheme.accentColor : 'gray.400'
-                        }
-                      >
-                        Image
-                      </Text>
-                    </HStack>
-                  )}
+                actualMessage.images.length &&
+                actualMessage.images.length > 0 ? (
+                  <HStack alignItems='center' space='1'>
+                    <Icon
+                      as={MaterialCommunityIcons}
+                      name='image'
+                      color='gray.500'
+                      size={4}
+                    />
+                    <Text
+                      color={isUserTypying ? darktheme.accentColor : 'gray.400'}
+                    >
+                      Image
+                    </Text>
+                  </HStack>
+                ) : null}
               </HStack>
-              {getNotViewedMessages(session?.user.id) > 0 && (
+              {getNotViewedMessages(session?.user.id) > 0 ? (
                 <Badge
                   bg={darktheme.accentColor}
                   color='white'
@@ -216,7 +214,7 @@ const ChatUsersListItem = ({ item }: Props) => {
                 >
                   {getNotViewedMessages(session?.user.id)}
                 </Badge>
-              )}
+              ) : null}
             </Flex>
           </Flex>
         </HStack>

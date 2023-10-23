@@ -34,7 +34,8 @@ const TabsView = () => {
       }
       const isOtherUserMessage = !!room.messages.find((dateMessage) =>
         dateMessage.messages.find((message) => {
-          if (message.user !== session?.user.id) return message.view === false;
+          if (message.user_id !== session?.user.id)
+            return message.view === false;
         })
       );
 
@@ -65,7 +66,7 @@ const TabsView = () => {
           >
             <HStack space='2'>
               <Text color='white'>Chats</Text>
-              {getRoomsNotViewed() !== 0 && (
+              {getRoomsNotViewed() !== 0 ? (
                 <Badge
                   rounded='full'
                   zIndex={1}
@@ -78,7 +79,7 @@ const TabsView = () => {
                 >
                   {getRoomsNotViewed()}
                 </Badge>
-              )}
+              ) : null}
             </HStack>
           </Pressable>
           <Pressable p='1' flex='1' alignItems={'center'}>
