@@ -92,7 +92,7 @@ const formatMessagesByDates = (messages: Message[]) => {
 
 const getUserChatRooms = async (user: User) => {
   const userRooms = await getUserRooms(user?.id!);
-  console.log('userRooms', userRooms);
+  // console.log('userRooms', userRooms);
 
   let newRooms: RoomsState = {
     rooms: [],
@@ -100,9 +100,9 @@ const getUserChatRooms = async (user: User) => {
 
   for (let i = 0; i < userRooms?.length || 0; i++) {
     const roomData: any = await getRoomWithUserProfile(userRooms[i].room_id);
-    console.log('roomData', roomData);
+    // console.log('roomData', roomData);
     const roomMessages: any = await getRoomMessages(userRooms[i].room_id);
-    console.log('roomMessages', roomMessages);
+    // console.log('roomMessages', roomMessages);
     const roomBlockUsers: any = await getRoomBlockUsers(userRooms[i].room_id);
     const newRoom: RoomState = {
       room: 0,
@@ -119,7 +119,7 @@ const getUserChatRooms = async (user: User) => {
 
     newRoom.messages = formatMessagesByDates(roomMessages.reverse());
     newRoom.blockedUsers = roomBlockUsers;
-    console.log('newRoom', newRoom);
+    // console.log('newRoom', newRoom);
     newRooms.rooms.push(newRoom);
   }
 

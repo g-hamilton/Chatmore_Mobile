@@ -35,7 +35,7 @@ export const getRoomWithUserProfile = async (room_id: number) => {
   try {
     const { data, error } = await supabase
       .from('user_has_room')
-      .select('*, profiles!inner(*)') // 'user' not correct. No user table in db definitions. Why the inner join here?
+      .select('*, profiles!inner(*)')
       .eq('room_id', room_id);
     if (error) throw error;
     return data;
