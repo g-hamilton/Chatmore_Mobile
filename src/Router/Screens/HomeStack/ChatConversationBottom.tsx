@@ -58,8 +58,8 @@ const ChatConversationBottom = () => {
     const newMessage = {
       created_at: new Date().toISOString(),
       content,
-      room: actualRoom?.room,
-      user: session?.user.id,
+      room_id: actualRoom?.room,
+      user_id: session?.user.id,
       is_blocked: isUserBlocked.isRoomBlocked,
     };
     try {
@@ -96,8 +96,8 @@ const ChatConversationBottom = () => {
     const newMessage = {
       created_at: new Date().toISOString(),
       content: '',
-      room: route.params.room_id,
-      user: session?.user.id,
+      room_id: route.params.room_id,
+      user_id: session?.user.id,
     };
 
     try {

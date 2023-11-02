@@ -46,11 +46,11 @@ const ContactScreen = () => {
     // Create ChatRoom between users
     const { error: chatUserRoomError }: { error: any } = await supabase
       .from('user_has_room')
-      .insert({ room_id: roomId, user: userId });
+      .insert({ room_id: roomId, user_id: userId });
     if (chatUserRoomError) throw chatUserRoomError;
     const { error: userRoomError }: { error: any } = await supabase
       .from('user_has_room')
-      .insert({ room_id: roomId, user: session?.user.id });
+      .insert({ room_id: roomId, user_id: session?.user.id });
     if (userRoomError) throw userRoomError;
     const newRoom: RoomState = {
       room: roomId,

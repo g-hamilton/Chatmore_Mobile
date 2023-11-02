@@ -74,8 +74,8 @@ export const getRoomBlockUsers = async (room_id: string) => {
 
 export const createMessage = async (messageData: {
   created_at: string;
-  room: number | undefined;
-  user: string | undefined;
+  room_id: number | undefined;
+  user_id: string | undefined;
   content: string;
 }) => {
   try {
