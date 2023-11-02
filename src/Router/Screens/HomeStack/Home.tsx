@@ -56,6 +56,7 @@ const Home = () => {
           });
           channel
             .on('broadcast', { event: 'message' }, (payload) => {
+              console.log(payload);
               addMessageToRoom(payload.payload.message);
             })
             .on('broadcast', { event: 'deleteMessage' }, (payload) => {
